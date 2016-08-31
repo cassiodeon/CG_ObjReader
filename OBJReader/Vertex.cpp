@@ -1,5 +1,10 @@
 #include "Vertex.h"
 
 Vertex::Vertex() {
-	//coord.push_back()
+}
+
+Vertex::Vertex(float x, float y, float z) {
+	coord[0] = x;
+	coord[1] = y;
+	coord[3] = z;
 }

@@ -22,15 +22,11 @@ Mesh* OBJReader::createOBJ()
 			stringstream streamLine(line);
 			
 			streamLine >> lineIdentifier;
-			cout << lineIdentifier << endl;
+			//cout << lineIdentifier;
 
 			if (lineIdentifier == "v") { //Vertex
-				string aux;
-				streamLine >> aux;
-				cout << aux ;
-				//Setar o vertice no allVertex
-				//v = new Vertex(x, y, z)
-				//mesh.addVertex(v);
+				Vertex *v = getVertex(streamLine);
+				mesh->addVertex(v);
 			}else if (lineIdentifier == "vt") { //TextureMapping
 				//v = new Vertex(x, y, z)
 				//mesh.addTextureMapping
@@ -47,7 +43,42 @@ Mesh* OBJReader::createOBJ()
 			}
 		}
 		file.close();
+		cout << "--------------" << endl;
+		cout << "--------------" << endl;
+		for (int i = 0; i < mesh->getAllVertex().size(); i++)
+		{
+			//for (int j = 0; j < (sizeof(mesh->getAllVertex()[i]->coord) / sizeof(*mesh->getAllVertex()[i]->coord)); i++)
+			//{
+			//	cout << mesh->getAllVertex()[i]->coord[j] << " | ";
+			//}
+			//cout << i << endl;
+			//cout << mesh->getAllVertex()[i]->coord[0] << " | ";
+			//cout << mesh->getAllVertex()[i]->coord[1] << " | ";
+			//cout <<  mesh->getAllVertex()[i]->coord[2] << " | ";
+			//cout << endl;
+		}
 	}
 
 	return mesh;
+}
+
+Vertex* OBJReader::getVertex(stringstream &streamVertex) {
+	
+	int index = 0;
+	float c[3];
+
+	while (streamVertex.good() && index < 4)  //Verifica se a stream pode ser usada no io
+	{
+		int coord;
+		string auxCoord;
+		streamVertex >> auxCoord;
+		c[index] = atof(auxCoord.c_str());
+	}
+	//cout << endl;
+	//cout << c[0] << " | ";
+	//cout << c[1] << " | ";
+	//cout << c[2] << " | ";
+	//cout << endl;
+	Vertex* v = new Vertex(c[0], c[1], c[2]);
+	return v;
 }

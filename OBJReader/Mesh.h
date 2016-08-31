@@ -12,5 +12,6 @@ private:
 
 public:
 	Mesh();
-	void addVertex(Vertex);
+	void addVertex(Vertex* v);
+	vector<Vertex*> getAllVertex();
 };

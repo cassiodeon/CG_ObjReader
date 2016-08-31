@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(250, 250);
 	glutInitWindowPosition(100, 100);
-	glutCreateWindow("Cubo");
+	glutCreateWindow("ObjReader");
 	init();
 	glutDisplayFunc(display);
 	glutMainLoop();

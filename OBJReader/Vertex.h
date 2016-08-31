@@ -4,8 +4,9 @@ using namespace std;
 
 class Vertex {
 private:
-	vector<float> coord;
-
+	
 public:
 	Vertex();
+	Vertex(float x, float y, float z);
+	float coord[3];
 };
