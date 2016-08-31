@@ -1,0 +1,11 @@
+﻿  Vertex.cpp
+  TextureMapping.cpp
+  OBJReader.cpp
+  Mesh.cpp
+  Material.cpp
+  Main.cpp
+  Group.cpp
+  Face.cpp
+  Generating Code...
+  OBJReader.vcxproj -> D:\Unisinos\CG_ObjReader\Debug\OBJReader.exe
+  OBJReader.vcxproj -> D:\Unisinos\CG_ObjReader\Debug\OBJReader.pdb (Partial PDB)
