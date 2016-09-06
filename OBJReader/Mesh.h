@@ -5,13 +5,16 @@ using namespace std;
 
 class Mesh {
 private:
+	
+public:
+	Mesh();
 	vector<Vertex*> allVertex;
 	vector<Vertex*> allNormals;
 	vector<TextureMapping*> allMappings;
 	vector<Group*> groups;
 
-public:
-	Mesh();
 	void addVertex(Vertex* v);
-	vector<Vertex*> getAllVertex();
+	void addTextureMapping(TextureMapping* tm);
+	void addNormal(Vertex* v);
+
 };

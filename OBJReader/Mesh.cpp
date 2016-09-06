@@ -8,7 +8,12 @@ void Mesh::addVertex(Vertex* v) {
 	allVertex.push_back(v);
 }
 
-vector<Vertex*> Mesh::getAllVertex()
+void Mesh::addTextureMapping(TextureMapping * tm)
 {
-	return allVertex;
+	allMappings.push_back(tm);
+}
+
+void Mesh::addNormal(Vertex * v)
+{
+	allNormals.push_back(v);
 }
