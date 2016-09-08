@@ -17,3 +17,8 @@ void Mesh::addNormal(Vertex * v)
 {
 	allNormals.push_back(v);
 }
+
+void Mesh::addGroup(Group * g)
+{
+	groups.push_back(g);
+}

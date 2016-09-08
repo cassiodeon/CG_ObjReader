@@ -1,3 +1,6 @@
-﻿  Mesh.cpp
-  OBJReader.vcxproj -> D:\Unisinos\CG_ObjReader\Debug\OBJReader.exe
-  OBJReader.vcxproj -> D:\Unisinos\CG_ObjReader\Debug\OBJReader.pdb (Partial PDB)
+﻿  Main.cpp
+c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(62): warning C4018: '<': signed/unsigned mismatch
+c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(65): warning C4018: '<': signed/unsigned mismatch
+c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(70): warning C4018: '<': signed/unsigned mismatch
+  OBJReader.vcxproj -> C:\Workspace\Unisinos\ComputacaoGrafica\CG_ObjReader\Debug\OBJReader.exe
+  OBJReader.vcxproj -> C:\Workspace\Unisinos\ComputacaoGrafica\CG_ObjReader\Debug\OBJReader.pdb (Partial PDB)

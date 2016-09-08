@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "OBJReader.h"
 
 OBJReader::OBJReader() {
@@ -16,11 +17,12 @@ Mesh* OBJReader::createOBJ()
 	if (file.is_open())
 	{
 		//enquanto end of file for false continua
+		Group* currentGroup;
 		while (!file.eof())
 		{
 			file.getline(line,512);
 			stringstream streamLine(line);
-			
+			lineIdentifier = "";
 			streamLine >> lineIdentifier;
 			
 			if (lineIdentifier == "v") { //Vertex
@@ -33,12 +35,12 @@ Mesh* OBJReader::createOBJ()
 				Vertex *v = getVertex(streamLine);
 				mesh->addNormal(v);
 			}else if (lineIdentifier == "g") { //Group
-				//g = new Group(name)
-				//mesh.addGroup
-				//currentGroup = g
+				Group* g = getGroup(streamLine);
+				mesh->addGroup(g);
+				currentGroup = g;
 			}else if (lineIdentifier == "f") { //Face
-				//f = new Face(...)
-				//mesh.group[currentGroup].addFace(f);
+				Face *f = getFace(streamLine);
+				currentGroup->groupFace.push_back(f);
 			}
 		}
 		file.close();
@@ -58,7 +60,81 @@ Vertex* OBJReader::getVertex(stringstream &streamVertex) {
 		streamVertex >> auxCoord;
 		
 		c[index] = atof(auxCoord.c_str());
+		index++;
 	}
 	Vertex* v = new Vertex(c[0], c[1], c[2]);
 	return v;
+}
+
+Face* OBJReader::getFace(stringstream &streamVertex) {
+	/**
+		Somente vértices :
+			f v1 v2 v3
+		Completo :
+			f v1/t1/n1 v2/t2/n2 v3/t3/n3
+		Vértices e normais :
+			f v1//n1 v2//n2 v3//n3 
+		Vértices e texturas :
+			f v1/t1 v2/t2 v3/t3
+	*/
+	
+	Face* f = new Face();
+	while (streamVertex.good())  //Verifica se a stream pode ser usada no io
+	{
+		//Obtem as informações de um vertice
+		string auxCoord = "";
+		streamVertex >> auxCoord;
+		
+		string infoIndex = "";
+		//Array que irá conter as as informações do vertice (indice do vertice [0], indice da normal [1] e indice da textura [2])
+		int indexs[3];
+		indexs[0] = indexs[1] = indexs[2] = -1;
+
+		int currentIndex = 0;
+		for (int i = 0; i < auxCoord.size(); i++)
+		{
+			if (auxCoord[i] == '/') {
+				if (infoIndex != "") {
+					//atribui o indice da informação
+					indexs[currentIndex] = atoi(infoIndex.c_str()) - 1; //Index do obj começa em 1
+				}
+				
+				//Vai para a proxima informação do vertice (limpa as variáveis)
+				currentIndex++;
+				infoIndex = "";
+			}
+			else {
+				infoIndex += auxCoord[i];
+			}
+		}
+		
+		//Pega ultima informação ou caso nao tenha '/'
+		if (infoIndex != "") {
+			indexs[currentIndex] = atoi(infoIndex.c_str()) - 1; //Index do obj começa em 1
+		}
+		
+		//Adiciona o index do vertice
+		if (indexs[0] > -1) {
+			f->vertex.push_back(indexs[0]);
+		}
+
+		///////// PODE NÃO TER NORMAL OU NÃO TER A TEXTURA!! TRATAR ISSO!!!!
+		//Adiciona o index da textura
+		if (indexs[1] > -1 ) {
+			f->mappings.push_back(indexs[1]);
+		}
+
+		//Adiciona o index da normal
+		if (indexs[2] > -1) {
+			f->normals.push_back(indexs[2]);
+		}
+	}
+
+	return f;
+}
+
+Group * OBJReader::getGroup(stringstream &streamVertex)
+{
+	Group* g = new Group(streamVertex.str());
+	return g;
 }

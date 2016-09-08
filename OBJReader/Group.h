@@ -5,8 +5,11 @@ using namespace std;
 class Group
 {
 private:
-	vector<Face> groupFace;
-
+	
 public:
+	vector<Face*> groupFace;
+	string name;
+
 	Group();
+	Group(string name);
 };

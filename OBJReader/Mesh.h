@@ -16,5 +16,6 @@ public:
 	void addVertex(Vertex* v);
 	void addTextureMapping(TextureMapping* tm);
 	void addNormal(Vertex* v);
+	void addGroup(Group* g);
 
 };
