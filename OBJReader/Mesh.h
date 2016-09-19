@@ -12,6 +12,7 @@ public:
 	vector<Vertex*> allNormals;
 	vector<TextureMapping*> allMappings;
 	vector<Group*> groups;
+	string fileNameMaterial;
 
 	void addVertex(Vertex* v);
 	void addTextureMapping(TextureMapping* tm);

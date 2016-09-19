@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <GL/glut.h>
 #include "OBJReader.h"
+#include <map>
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -12,6 +13,8 @@
 
 OBJReader objReader;
 Mesh* mesh;
+map<string*, Material*> materialLib;
+
 
 GLdouble eyeX = 0, eyeY = 0, eyeZ = 0;
 GLdouble directionX = 0.0, directionY = 0.0, directionZ = -1.0;
@@ -20,6 +23,7 @@ GLdouble angle = 270.0;
 void display(void)
 {
 
+#pragma region Monta Chão
 	/*  clear all pixels  */
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -58,6 +62,7 @@ void display(void)
 	glVertex3f(-5.0, -0.2, -5.0);
 	glVertex3f(-5.0, -0.2, 0.0);
 	glEnd();
+#pragma endregion 
 
 	for (int i = 0; i < mesh->groups.size(); i++)
 	{
@@ -75,6 +80,7 @@ void display(void)
 				coords[0] = mesh->allVertex[indiceVertex]->coord[0];
 				coords[1] = mesh->allVertex[indiceVertex]->coord[1];
 				coords[2] = mesh->allVertex[indiceVertex]->coord[2];
+				//glTexCoord2f()
 				glVertex3f(coords[0], coords[1], coords[2]);
 			}
 			glEnd();
@@ -90,9 +96,11 @@ void init(void)
 	glClearColor(0, 0, 0, 0);
 
 	//Nome do arquivo obj
-	objReader.pathFile = "C:/Workspace/Unisinos/ComputacaoGrafica/CG_ObjReader/Imagens/trout.obj";
+	objReader.path = "C:/Users/cassiode/Desktop/CG_ObjReader/Imagens/";
 	//Monta o objeto retornando a malha
-	mesh = objReader.createOBJ();
+	mesh = objReader.createOBJ("trout.obj");
+	materialLib = objReader.getMaterialLib(mesh->fileNameMaterial);
+
 }
 
 void camera()

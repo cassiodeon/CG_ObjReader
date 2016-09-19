@@ -5,12 +5,12 @@ OBJReader::OBJReader() {
 
 }
 
-Mesh* OBJReader::createOBJ()
+Mesh* OBJReader::createOBJ(string fileName)
 {
 	Mesh *mesh = new Mesh();
 	
 	//Abre arquivo setado
-	ifstream file(pathFile);
+	ifstream file(path+fileName);
 	
 	char line[1024];
 	string lineIdentifier;
@@ -42,11 +42,64 @@ Mesh* OBJReader::createOBJ()
 				Face *f = getFace(streamLine);
 				currentGroup->groupFace.push_back(f);
 			}
+			else if (lineIdentifier == "mtllib") { //Arquivo com as configurações do material
+				//string nameMaterial = "";
+				streamLine >> mesh->fileNameMaterial;
+			}
 		}
 		file.close();
 	}
 
 	return mesh;
+}
+
+map<string*, Material*> OBJReader::getMaterialLib(string fileNameMaterial)
+{
+	map<string*, Material*> matLib;
+	ifstream file(path + fileNameMaterial);
+
+	char line[1024];
+	string lineIdentifier;
+	if (file.is_open()) {
+		Material* currentMat = new Material();
+		while (!file.eof())
+		{
+			file.getline(line, 512);
+			stringstream streamLine(line);
+			lineIdentifier = "";
+			streamLine >> lineIdentifier;
+
+			if (lineIdentifier == "newmtl") { //Nome
+				Material* m = new Material();
+				streamLine >> m->name;
+				//REVISAR!!
+				if (currentMat != nullptr) {
+					matLib[&m->name] = currentMat;
+				}
+				
+				currentMat = m;
+				
+			}
+			else if (lineIdentifier == "Kd") {
+				//pegar as 3 informações
+				//currentMat->kd;
+			}
+			else if (lineIdentifier == "Ka") {
+				//pegar as 3 informações
+				//currentMat->ka;
+			}
+			else if (lineIdentifier == "Ks") {
+				//pegar as 3 informações
+				//currentMat->ks;
+			}
+			else if (lineIdentifier == "Ns") {
+				//pegar 1 informação
+				//currentMat->Ns;
+			}
+//map_Kd??????
+		}
+	}
+	return matLib;
 }
 
 Vertex* OBJReader::getVertex(stringstream &streamVertex) {

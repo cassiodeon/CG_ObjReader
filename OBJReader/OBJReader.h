@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <map>
 #include "Mesh.h"
+#include "Material.h"
 
 using namespace std;
 
@@ -10,9 +12,10 @@ private:
 	Vertex* getVertex(stringstream &streamVertex);
 	Face* OBJReader::getFace(stringstream &streamVertex);
 	Group* OBJReader::getGroup(stringstream &streamVertex);
-
+	
 public:
-	string pathFile;
+	string path;
 	OBJReader();
-	Mesh* createOBJ();
+	Mesh* createOBJ(string fileName);
+	map<string*, Material*> getMaterialLib(string fileNameMaterial);
 };
