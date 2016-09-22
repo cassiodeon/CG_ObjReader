@@ -13,7 +13,7 @@
 
 OBJReader objReader;
 Mesh* mesh;
-map<string*, Material*> materialLib;
+map<char*, Material*> materialLib;
 
 
 GLdouble eyeX = 0, eyeY = 0, eyeZ = 0;
@@ -96,7 +96,7 @@ void init(void)
 	glClearColor(0, 0, 0, 0);
 
 	//Nome do arquivo obj
-	objReader.path = "C:/Users/cassiode/Desktop/CG_ObjReader/Imagens/";
+	objReader.path = "C:/Workspace/Unisinos/ComputacaoGrafica/CG_ObjReader/Imagens/";
 	//Monta o objeto retornando a malha
 	mesh = objReader.createOBJ("trout.obj");
 	materialLib = objReader.getMaterialLib(mesh->fileNameMaterial);

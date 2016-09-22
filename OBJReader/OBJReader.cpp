@@ -53,9 +53,9 @@ Mesh* OBJReader::createOBJ(string fileName)
 	return mesh;
 }
 
-map<string*, Material*> OBJReader::getMaterialLib(string fileNameMaterial)
+map<char*, Material*> OBJReader::getMaterialLib(string fileNameMaterial)
 {
-	map<string*, Material*> matLib;
+	map<char*, Material*> matLib;
 	ifstream file(path + fileNameMaterial);
 
 	char line[1024];
@@ -74,32 +74,45 @@ map<string*, Material*> OBJReader::getMaterialLib(string fileNameMaterial)
 				streamLine >> m->name;
 				//REVISAR!!
 				if (currentMat != nullptr) {
-					matLib[&m->name] = currentMat;
+					matLib[m->name] = currentMat;
 				}
 				
 				currentMat = m;
 				
 			}
 			else if (lineIdentifier == "Kd") {
-				//pegar as 3 informações
-				//currentMat->kd;
+				currentMat->setKd(getInfoMaterial(streamLine));
 			}
 			else if (lineIdentifier == "Ka") {
-				//pegar as 3 informações
-				//currentMat->ka;
+				currentMat->setKa(getInfoMaterial(streamLine));
 			}
 			else if (lineIdentifier == "Ks") {
-				//pegar as 3 informações
-				//currentMat->ks;
+				currentMat->setKs(getInfoMaterial(streamLine));
 			}
 			else if (lineIdentifier == "Ns") {
-				//pegar 1 informação
-				//currentMat->Ns;
+				char* aux = "";
+				streamLine >> aux;
+				currentMat->ns = atoi(aux);
 			}
 //map_Kd??????
 		}
 	}
 	return matLib;
+}
+float* OBJReader::getInfoMaterial(stringstream &streamVertex) {
+	int index = 0;
+	float info[3];
+
+	while (streamVertex.good() && index < 4)  //Verifica se a stream pode ser usada no io
+	{
+		string auxCoord;
+		streamVertex >> auxCoord;
+
+		info[index] = atof(auxCoord.c_str());
+		index++;
+	}
+	
+	return info;
 }
 
 Vertex* OBJReader::getVertex(stringstream &streamVertex) {
