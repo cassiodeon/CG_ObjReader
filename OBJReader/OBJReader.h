@@ -1,7 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <map>
+#include "Includes.h"
 #include "Mesh.h"
 #include "Material.h"
 
@@ -18,5 +15,5 @@ public:
 	string path;
 	OBJReader();
 	Mesh* createOBJ(string fileName);
-	map<char*, Material*> getMaterialLib(string fileNameMaterial);
+	map<string, Material*> getMaterialLib(string fileNameMaterial);
 };

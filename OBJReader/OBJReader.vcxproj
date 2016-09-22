@@ -112,6 +112,7 @@
   <ItemGroup>
     <ClInclude Include="Face.h" />
     <ClInclude Include="Group.h" />
+    <ClInclude Include="Includes.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="OBJReader.h" />

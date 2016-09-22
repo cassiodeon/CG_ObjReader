@@ -29,8 +29,22 @@ Mesh* OBJReader::createOBJ(string fileName)
 				Vertex *v = getVertex(streamLine);
 				mesh->addVertex(v);
 			}else if (lineIdentifier == "vt") { //TextureMapping
-				//mesh->addTextureMapping(v);
-				//Somente 2 coordenadas????
+				//Somente 2 indices
+				int index = 0;
+				float t[2];
+
+				//Obtem os dois dados da textura
+				while (streamLine.good() && index < 2)
+				{
+					string auxCoord;
+					streamLine >> auxCoord;
+
+					t[index] = atof(auxCoord.c_str());
+					index++;
+				}
+
+				TextureMapping* tm = new TextureMapping(t);
+				mesh->addTextureMapping(tm);
 			}else if (lineIdentifier == "vn") { //Normal
 				Vertex *v = getVertex(streamLine);
 				mesh->addNormal(v);
@@ -41,9 +55,9 @@ Mesh* OBJReader::createOBJ(string fileName)
 			}else if (lineIdentifier == "f") { //Face
 				Face *f = getFace(streamLine);
 				currentGroup->groupFace.push_back(f);
-			}
-			else if (lineIdentifier == "mtllib") { //Arquivo com as configurações do material
-				//string nameMaterial = "";
+			}else if(lineIdentifier == "usemtl") {
+				streamLine >> currentGroup->nameMaterial;
+			}else if (lineIdentifier == "mtllib") { //Arquivo com as configurações do material
 				streamLine >> mesh->fileNameMaterial;
 			}
 		}
@@ -53,9 +67,9 @@ Mesh* OBJReader::createOBJ(string fileName)
 	return mesh;
 }
 
-map<char*, Material*> OBJReader::getMaterialLib(string fileNameMaterial)
+map<string, Material*> OBJReader::getMaterialLib(string fileNameMaterial)
 {
-	map<char*, Material*> matLib;
+	map<string, Material*> matLib;
 	ifstream file(path + fileNameMaterial);
 
 	char line[1024];
@@ -72,47 +86,50 @@ map<char*, Material*> OBJReader::getMaterialLib(string fileNameMaterial)
 			if (lineIdentifier == "newmtl") { //Nome
 				Material* m = new Material();
 				streamLine >> m->name;
-				//REVISAR!!
-				if (currentMat != nullptr) {
-					matLib[m->name] = currentMat;
+				
+				if (currentMat->name != "") {
+					matLib[currentMat->name] = currentMat;
 				}
 				
 				currentMat = m;
 				
 			}
-			else if (lineIdentifier == "Kd") {
-				currentMat->setKd(getInfoMaterial(streamLine));
-			}
-			else if (lineIdentifier == "Ka") {
-				currentMat->setKa(getInfoMaterial(streamLine));
-			}
-			else if (lineIdentifier == "Ks") {
-				currentMat->setKs(getInfoMaterial(streamLine));
+			else if (lineIdentifier == "Kd" || lineIdentifier == "Ka" || lineIdentifier == "Ks") {
+				int index = 0;
+				float info[3];
+
+				while (streamLine.good() && index < 4)
+				{
+					string aux;
+					streamLine >> aux;
+
+					info[index] = atof(aux.c_str());
+					index++;
+				}
+
+				if (lineIdentifier == "Kd") {
+					currentMat->setKd(info);
+				}
+				else if (lineIdentifier == "Ka") {
+					currentMat->setKa(info);
+				}
+				else if (lineIdentifier == "Ks") {
+					currentMat->setKs(info);
+				}
 			}
 			else if (lineIdentifier == "Ns") {
-				char* aux = "";
+				string aux = "";
 				streamLine >> aux;
-				currentMat->ns = atoi(aux);
+				currentMat->ns = atof(aux.c_str());
 			}
-//map_Kd??????
+			//map_Kd??????
+		}
+
+		if (currentMat->name != "") {
+			matLib[currentMat->name] = currentMat;
 		}
 	}
 	return matLib;
-}
-float* OBJReader::getInfoMaterial(stringstream &streamVertex) {
-	int index = 0;
-	float info[3];
-
-	while (streamVertex.good() && index < 4)  //Verifica se a stream pode ser usada no io
-	{
-		string auxCoord;
-		streamVertex >> auxCoord;
-
-		info[index] = atof(auxCoord.c_str());
-		index++;
-	}
-	
-	return info;
 }
 
 Vertex* OBJReader::getVertex(stringstream &streamVertex) {

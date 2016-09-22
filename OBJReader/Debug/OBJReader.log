@@ -1,3 +1,6 @@
-﻿  Material.cpp
-  OBJReader.vcxproj -> C:\Workspace\Unisinos\ComputacaoGrafica\CG_ObjReader\Debug\OBJReader.exe
-  OBJReader.vcxproj -> C:\Workspace\Unisinos\ComputacaoGrafica\CG_ObjReader\Debug\OBJReader.pdb (Partial PDB)
+﻿  Main.cpp
+d:\unisinos\cg_objreader\objreader\main.cpp(69): warning C4018: '<': signed/unsigned mismatch
+d:\unisinos\cg_objreader\objreader\main.cpp(72): warning C4018: '<': signed/unsigned mismatch
+d:\unisinos\cg_objreader\objreader\main.cpp(77): warning C4018: '<': signed/unsigned mismatch
+  OBJReader.vcxproj -> D:\Unisinos\CG_ObjReader\Debug\OBJReader.exe
+  OBJReader.vcxproj -> D:\Unisinos\CG_ObjReader\Debug\OBJReader.pdb (Partial PDB)

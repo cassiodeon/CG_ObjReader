@@ -1,7 +1,4 @@
-#include <Windows.h>
-#include <GL/glut.h>
 #include "OBJReader.h"
-#include <map>
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -13,12 +10,17 @@
 
 OBJReader objReader;
 Mesh* mesh;
-map<char*, Material*> materialLib;
+map<string, Material*> materialLib;
 
 
 GLdouble eyeX = 0, eyeY = 0, eyeZ = 0;
 GLdouble directionX = 0.0, directionY = 0.0, directionZ = -1.0;
 GLdouble angle = 270.0;
+
+GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+GLfloat light_diffuse[] = { 0.0, 0.0, 1.0, 1.0 };
+GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat light_position[] = { 1.0, 2.0, 3.0, 1.0 };
 
 void display(void)
 {
@@ -74,14 +76,15 @@ void display(void)
 			glColor3f(1.0, 1.0, 1.0);
 			for (int k = 0; k < f->vertex.size(); k++)
 			{
-				int indiceVertex = f->vertex[k];
+				if (f->normals[k] > -1) {
+					glNormal3fv(mesh->allNormals[f->normals[k]]->coord);
+				}
 
-				float coords[3];
-				coords[0] = mesh->allVertex[indiceVertex]->coord[0];
-				coords[1] = mesh->allVertex[indiceVertex]->coord[1];
-				coords[2] = mesh->allVertex[indiceVertex]->coord[2];
 				//glTexCoord2f()
-				glVertex3f(coords[0], coords[1], coords[2]);
+
+				int indiceVertex = f->vertex[k];
+				Vertex* v = mesh->allVertex[indiceVertex];
+				glVertex3f(v->coord[0], v->coord[1], v->coord[2]);
 			}
 			glEnd();
 		}
@@ -96,11 +99,26 @@ void init(void)
 	glClearColor(0, 0, 0, 0);
 
 	//Nome do arquivo obj
-	objReader.path = "C:/Workspace/Unisinos/ComputacaoGrafica/CG_ObjReader/Imagens/";
+	objReader.path = "D:/Unisinos/CG_ObjReader/Imagens/";
 	//Monta o objeto retornando a malha
 	mesh = objReader.createOBJ("trout.obj");
+	
+	//Monta o map de materials
 	materialLib = objReader.getMaterialLib(mesh->fileNameMaterial);
+	
+	map<string, Material*>::iterator it;
+	for (it = materialLib.begin(); it != materialLib.end(); it++)
+	{
+		std::cout << it->first  // string (key)
+			<< ':'
+			<< it->second   // string's value 
+			<< std::endl;
+	}
 
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 }
 
 void camera()

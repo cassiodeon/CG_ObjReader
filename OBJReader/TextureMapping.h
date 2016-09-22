@@ -1,9 +1,11 @@
+#include "Includes.h"
 
 class TextureMapping
 {
 private:
-	float texture1;
-	float texture2;
+	
 public:
 	TextureMapping();
+	TextureMapping(float* t);
+	float texture[2];
 };

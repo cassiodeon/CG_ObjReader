@@ -1,3 +1,4 @@
+#include "Includes.h"
 #include "Face.h"
 
 using namespace std;
@@ -9,6 +10,7 @@ private:
 public:
 	vector<Face*> groupFace;
 	string name;
+	string nameMaterial;
 
 	Group();
 	Group(string name);
