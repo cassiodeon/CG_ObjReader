@@ -18,8 +18,8 @@ GLdouble directionX = 0.0, directionY = 0.0, directionZ = -1.0;
 GLdouble angle = 270.0;
 
 GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-GLfloat light_diffuse[] = { 0.0, 0.0, 1.0, 1.0 };
-GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+//GLfloat light_diffuse[] = { 0.0, 0.0, 1.0, 1.0 };
+//GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light_position[] = { 1.0, 2.0, 3.0, 1.0 };
 
 void display(void)
@@ -115,10 +115,13 @@ void init(void)
 			<< std::endl;
 	}
 
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	//glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light_position);
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 }
 
 void camera()
