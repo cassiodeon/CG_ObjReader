@@ -122,7 +122,15 @@ map<string, Material*> OBJReader::getMaterialLib(string fileNameMaterial)
 				streamLine >> aux;
 				currentMat->ns = atof(aux.c_str());
 			}
-			//map_Kd??????
+			else if (lineIdentifier == "map_Kd") {
+				string nameImage = "";
+				streamLine >> nameImage;
+
+				Image* img = new Image();
+				nameImage = path + nameImage;
+				img->loadImage(nameImage);
+				currentMat->img = img;
+			}
 		}
 
 		if (currentMat->name != "") {

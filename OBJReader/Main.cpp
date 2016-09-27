@@ -17,9 +17,9 @@ GLdouble eyeX = 0, eyeY = 0, eyeZ = 0;
 GLdouble directionX = 0.0, directionY = 0.0, directionZ = -1.0;
 GLdouble angle = 270.0;
 
-GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-//GLfloat light_diffuse[] = { 0.0, 0.0, 1.0, 1.0 };
-//GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat light_ambient[] = { 0.0, 0.1, 0.0, 1.0 };
+GLfloat light_diffuse[] = { 0.0, 0.0, 1.0, 1.0 };
+GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light_position[] = { 1.0, 2.0, 3.0, 1.0 };
 
 void display(void)
@@ -30,64 +30,88 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// Vermelho
-	glBegin(GL_POLYGON);
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(0.0, -0.2, 0.0);
-	glVertex3f(0.0, -0.2, 5.0);
-	glVertex3f(-5.0, -0.2, 5.0);
-	glVertex3f(-5.0, -0.2, 0.0);
-	glEnd();
+	//glBegin(GL_POLYGON);
+	//glColor3f(1.0, 0.0, 0.0);
+	//glVertex3f(0.0, -0.2, 0.0);
+	//glVertex3f(0.0, -0.2, 5.0);
+	//glVertex3f(-5.0, -0.2, 5.0);
+	//glVertex3f(-5.0, -0.2, 0.0);
+	//glEnd();
 
 	// Verde
-	glBegin(GL_POLYGON);
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(0.0, -0.2, 0.0);
-	glVertex3f(0.0, -0.2, 5.0);
-	glVertex3f(5.0, -0.2, 5.0);
-	glVertex3f(5.0, -0.2, 0.0);
-	glEnd();
+	//glBegin(GL_POLYGON);
+	//glColor3f(0.0, 1.0, 0.0);
+	//glVertex3f(0.0, -0.2, 0.0);
+	//glVertex3f(0.0, -0.2, 5.0);
+	//glVertex3f(5.0, -0.2, 5.0);
+	//glVertex3f(5.0, -0.2, 0.0);
+	//glEnd();
 
 	// Amarelo
-	glBegin(GL_POLYGON);
-	glColor3f(1.0, 1.0, 0.0);
-	glVertex3f(0.0, -0.2, 0.0);
-	glVertex3f(0.0, -0.2, -5.0);
-	glVertex3f(5.0, -0.2, -5.0);
-	glVertex3f(5.0, -0.2, 0.0);
-	glEnd();
+	//glBegin(GL_POLYGON);
+	//glColor3f(1.0, 1.0, 0.0);
+	//glVertex3f(0.0, -0.2, 0.0);
+	//glVertex3f(0.0, -0.2, -5.0);
+	//glVertex3f(5.0, -0.2, -5.0);
+	//glVertex3f(5.0, -0.2, 0.0);
+	//glEnd();
 
 	// Azul
-	glBegin(GL_POLYGON);
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(0.0, -0.2, 0.0);
-	glVertex3f(0.0, -0.2, -5.0);
-	glVertex3f(-5.0, -0.2, -5.0);
-	glVertex3f(-5.0, -0.2, 0.0);
-	glEnd();
+	//glBegin(GL_POLYGON);
+	//glColor3f(0.0, 0.0, 1.0);
+	//glVertex3f(0.0, -0.2, 0.0);
+	//glVertex3f(0.0, -0.2, -5.0);
+	//glVertex3f(-5.0, -0.2, -5.0);
+	//glVertex3f(-5.0, -0.2, 0.0);
+	//glEnd();
 #pragma endregion 
 
 	for (int i = 0; i < mesh->groups.size(); i++)
 	{
 		Group* gr = mesh->groups[i];
+		int quantidadeVert = 0;
 		for (int j = 0; j < gr->groupFace.size(); j++)
 		{
 			Face* f = gr->groupFace[j];
-			glBegin(GL_POLYGON);
-			glColor3f(1.0, 1.0, 1.0);
+			GLuint tid = materialLib[gr->nameMaterial]->ID;
+			//materialLib[gr->nameMaterial]->
+			glBindTexture(GL_TEXTURE_2D, tid);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			//gr->nameMaterial;
+
+			
+			if (f->vertex.size() == 3 && quantidadeVert != f->vertex.size()) {
+				glEnd();
+				glBegin(GL_TRIANGLES);
+			}
+			else if (f->vertex.size() == 4 && quantidadeVert != f->vertex.size()) {
+				glEnd();
+				glBegin(GL_QUADS);
+			}
+			else {
+				glEnd();
+				glBegin(GL_POLYGON);
+			}
+
 			for (int k = 0; k < f->vertex.size(); k++)
 			{
 				if (f->normals[k] > -1) {
 					glNormal3fv(mesh->allNormals[f->normals[k]]->coord);
 				}
-
-				//glTexCoord2f()
+				
+				if (f->mappings[k] > -1) {
+					TextureMapping* tm = mesh->allMappings[f->mappings[k]];
+					glTexCoord2f(tm->texture[0], tm->texture[1]);
+					
+				}
 
 				int indiceVertex = f->vertex[k];
 				Vertex* v = mesh->allVertex[indiceVertex];
 				glVertex3f(v->coord[0], v->coord[1], v->coord[2]);
 			}
-			glEnd();
 		}
+		glEnd();
 	}
 
 	glFlush();
@@ -96,32 +120,61 @@ void display(void)
 void init(void)
 {
 	/* select clearing (background) color */
-	glClearColor(0, 0, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glColor3f(1.0, 1.0, 1.0);
+
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_COLOR_MATERIAL);
+	glCullFace(GL_BACK);
+	glShadeModel(GL_SMOOTH);
+
+	//Hbilita texturas
+	glEnable(GL_TEXTURE_2D);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	//Nome do arquivo obj
 	objReader.path = "D:/Unisinos/CG_ObjReader/Imagens/";
 	//Monta o objeto retornando a malha
-	mesh = objReader.createOBJ("trout.obj");
+	mesh = objReader.createOBJ("cube.obj");
 	
 	//Monta o map de materials
 	materialLib = objReader.getMaterialLib(mesh->fileNameMaterial);
 	
+	GLuint* ids = new GLuint[materialLib.size()];
+	glGenTextures(materialLib.size(), ids);
+	int count = 0;
 	map<string, Material*>::iterator it;
 	for (it = materialLib.begin(); it != materialLib.end(); it++)
-	{
-		std::cout << it->first  // string (key)
-			<< ':'
-			<< it->second   // string's value 
-			<< std::endl;
+	{		
+		Material* mt = it->second;
+		mt->ID = ids[count++];
+
+		Image* img = mt->img;
+		if (img != nullptr) {
+			glBindTexture(GL_TEXTURE_2D, mt->ID);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img->getWidth(), img->getHeight(), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, img->getPixels());
+			
+			free(img->getPixels());
+		}
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		
 	}
 
-	//glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light_position);
-	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+
+	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
 }
 
 void camera()

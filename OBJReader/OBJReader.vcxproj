@@ -112,6 +112,7 @@
   <ItemGroup>
     <ClInclude Include="Face.h" />
     <ClInclude Include="Group.h" />
+    <ClInclude Include="Image.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
@@ -122,6 +123,7 @@
   <ItemGroup>
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="Group.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />

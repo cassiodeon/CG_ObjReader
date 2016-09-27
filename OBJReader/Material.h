@@ -1,4 +1,5 @@
 #include "Includes.h"
+#include "Image.h"
 
 using namespace std;
 
@@ -12,9 +13,11 @@ public:
 	float kd[3];
 	float ks[3];
 	float ns;
+	Image* img;
+
 	void setKa(float* k);
 	void setKd(float* k);
 	void setKs(float* k);
-
+	
 	int ID;
 };
