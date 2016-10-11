@@ -14,6 +14,7 @@ Mesh* OBJReader::createOBJ(string fileName)
 	
 	char line[1024];
 	string lineIdentifier;
+	int idGroup = 0;
 	if (file.is_open())
 	{
 		//enquanto end of file for false continua
@@ -52,6 +53,7 @@ Mesh* OBJReader::createOBJ(string fileName)
 				Group* g = getGroup(streamLine);
 				mesh->addGroup(g);
 				currentGroup = g;
+
 			}else if (lineIdentifier == "f") { //Face
 				Face *f = getFace(streamLine);
 				currentGroup->groupFace.push_back(f);

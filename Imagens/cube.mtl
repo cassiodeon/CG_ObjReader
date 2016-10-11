@@ -3,16 +3,16 @@ illum 4
 Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-map_Kd Texture5.ppm
+map_Kd Texture3.ptm
 newmtl l2
 illum 4
 Kd 0.80 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-map_Kd Texture3.ppm
+map_Kd Texture5.ptm
 newmtl l3
 illum 4
 Kd 0.00 0.80 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-map_Kd Texture4.ppm
+map_Kd Texture3.ptm

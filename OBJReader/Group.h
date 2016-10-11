@@ -11,6 +11,7 @@ public:
 	vector<Face*> groupFace;
 	string name;
 	string nameMaterial;
+	bool draw = true;
 
 	Group();
 	Group(string name);
