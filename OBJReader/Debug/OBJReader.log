@@ -1,13 +1,2 @@
-﻿  Main.cpp
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(22): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(23): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(24): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(39): warning C4018: '<': signed/unsigned mismatch
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(56): warning C4018: '<': signed/unsigned mismatch
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(72): warning C4018: '<': signed/unsigned mismatch
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(285): warning C4018: '<': signed/unsigned mismatch
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(291): warning C4018: '<': signed/unsigned mismatch
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(308): warning C4018: '<': signed/unsigned mismatch
-c:\workspace\unisinos\computacaografica\cg_objreader\objreader\main.cpp(329): warning C4018: '<': signed/unsigned mismatch
-  OBJReader.vcxproj -> C:\Workspace\Unisinos\ComputacaoGrafica\CG_ObjReader\Debug\OBJReader.exe
-  OBJReader.vcxproj -> C:\Workspace\Unisinos\ComputacaoGrafica\CG_ObjReader\Debug\OBJReader.pdb (Partial PDB)
+﻿  OBJReader.vcxproj -> D:\Unisinos\CG_ObjReader\Debug\OBJReader.exe
+  OBJReader.vcxproj -> D:\Unisinos\CG_ObjReader\Debug\OBJReader.pdb (Partial PDB)

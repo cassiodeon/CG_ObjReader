@@ -19,10 +19,10 @@ GLdouble directionX = 0.0, directionY = 0.0, directionZ = -1.0;
 GLdouble angle = 270.0;
 GLdouble zNear = 0.5, zFar = 100.0, fovy = 66;
 
-GLfloat light_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
-GLfloat light_diffuse[] = { 0.9, 0.9, 0.9, 1.0 };
-GLfloat light_specular[] = { 0.8, 0.8, 0.8, 1.0 };
-GLfloat light_position[] = { 2.0, 3.0, 3.0, 1.0 };
+GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
+GLfloat light_diffuse[] = { 0.4, 0.4, 0.4, 1.0 };
+GLfloat light_specular[] = { 0.5, 0.5, 0.5, 1.0 };
+GLfloat light_position[] = { 5.0, 25.0, 5.0, 0.0 };
 
 //Variáveis para controle de configurações
 bool iluminacao = true, textura = true;
@@ -45,6 +45,7 @@ void display(void)
 			//glColor3f(1.0, 1.0, 1.0);
 			if (mat != nullptr) {
 				GLuint tid = mat->ID;
+				//GLfloat mat_shininess[] = { 0.06 };
 				glBindTexture(GL_TEXTURE_2D, tid);
 
 				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat->ka);
@@ -102,12 +103,12 @@ void init(void)
 	glColor3f(1.0, 1.0, 1.0);
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	
+
 	//glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	//glCullFace(GL_FRONT);
 
-	glEnable(GL_COLOR_MATERIAL);	
+	glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(shadeModel);
 
 	//Hbilita texturas
@@ -116,19 +117,19 @@ void init(void)
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	//Nome do arquivo obj
-	objReader.path = "C:/Workspace/Unisinos/ComputacaoGrafica/CG_ObjReader/Imagens/";
+	objReader.path = "D:/Unisinos/CG_ObjReader/Imagens/";
 	//Monta o objeto retornando a malha
 	mesh = objReader.createOBJ("trout.obj");
-	
+
 	//Monta o map de materials
 	materialLib = objReader.getMaterialLib(mesh->fileNameMaterial);
-	
+
 	GLuint* ids = new GLuint[materialLib.size()];
 	glGenTextures(materialLib.size(), ids);
 	int count = 0;
 	map<string, Material*>::iterator it;
 	for (it = materialLib.begin(); it != materialLib.end(); it++)
-	{		
+	{
 		Material* mt = it->second;
 		mt->ID = ids[count++];
 
@@ -137,21 +138,24 @@ void init(void)
 			glBindTexture(GL_TEXTURE_2D, mt->ID);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			
+
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img->getWidth(), img->getHeight(), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, img->getPixels());
-			
+
 			free(img->getPixels());
 		}
 
-		
+
 	}
 
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);	
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	
+
+	glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+	//GLfloat spot_exp[] = { 20.0 };
+	//glLightfv(GL_LIGHT1, GL_SPOT_EXPONENT, spot_exp);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 	glEnable(GL_LIGHTING);
 	
 }
@@ -206,7 +210,6 @@ void keyboard(unsigned char key, int x, int y)
 			glShadeModel(GL_SMOOTH);
 			shadeModel = GL_SMOOTH;
 		}
-		//cout << iluminacao;
 		break;
 	case 'l':
 	case 'L':
@@ -226,6 +229,16 @@ void keyboard(unsigned char key, int x, int y)
 		exit(0);
 		break;
 	}
+
+	cout << "Iluminacao = " + iluminacao;
+	cout << (iluminacao ? "Ligado" : "Desligado");
+	cout << "\n";
+	cout << "Textura = ";
+	cout << (textura ? "Ligado":"Desligado");
+	cout << "\n";
+	cout << "ShadeModel = ";
+	cout << (shadeModel == GL_SMOOTH ? "GL_SMOOTH" : "GL_FLAT");
+	cout << "\n";
 	glutPostRedisplay();
 }
 
@@ -328,24 +341,20 @@ void processHits(GLint hits, GLuint buffer[])
 	ptr = (GLuint *)buffer;
 	for (i = 0; i < hits; i++) { /*  for each hit  */
 		names = *ptr;
-		printf(" number of names for this hit = %d\n", names);
+		//printf(" number of names for this hit = %d\n", names);
 		ptr++;
-		printf("  z1 is %g;", (float)*ptr / 0x7fffffff); ptr++;
-		printf(" z2 is %g\n", (float)*ptr / 0x7fffffff); ptr++;
-		printf("   names are ");
+		ptr++;
+		ptr++;
+		//printf("  z1 is %g;", (float)*ptr / 0x7fffffff); ptr++;
+		//printf(" z2 is %g\n", (float)*ptr / 0x7fffffff); ptr++;
+		//printf("   names are ");
 		for (j = 0; j < names; j++) { //  for each name 
 			printf("%d ", *ptr);
-			//if (j == 0)  //  set row and column  
-			//	ii = *ptr;
-			//else if (j == 1)
-			//	jj = *ptr;
-			//
 			mesh->groups[*ptr]->draw = !mesh->groups[*ptr]->draw;
+			cout << "Grupo " + mesh->groups[*ptr]->name + (mesh->groups[*ptr]->draw ? " adicionado":" removido")+ "\n";
 			ptr++;
 		}
 		printf("\n");
-		
-		//board[ii][jj] = (board[ii][jj] + 1) % 3;
 	}
 }
 
@@ -370,12 +379,10 @@ void mouse(int button, int state, int x, int y)
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	/*  create 5x5 pixel picking region near cursor location      */
-	gluPickMatrix((GLdouble)x, (GLdouble)(viewport[3] - y),
-		5.0, 5.0, viewport);
-	//gluOrtho2D(0.0, 3.0, 0.0, 3.0);
+	/*  create 2x2 pixel picking region near cursor location      */
+	gluPickMatrix((GLdouble)x, (GLdouble)(viewport[3] - y),	2.0, 2.0, viewport);
+	
 	gluPerspective(fovy, widthScreen / (float)heightScreen, zNear, zFar);
-	//drawSquares(GL_SELECT);
 	drawSimpleOBJ();
 
 	glMatrixMode(GL_PROJECTION);
